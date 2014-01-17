@@ -26,9 +26,8 @@ public class MainActivity extends Activity {
 	private Button plusButton, minusButton, timesButton, divideButton, equalsButton, deleteButton, clearButton, decimalButton, button1, button2, button3, button4, button5, button6, button7, button8, button9, button0;
 	private EditText textField;
 	private float result;
-	private DecimalFormat decimalFormat = new DecimalFormat("###.0000##");
+	private DecimalFormat decimalFormat = new DecimalFormat("###.######");
 	private boolean resultDisplayed = false;
-	private int opIndex;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -212,17 +211,37 @@ public class MainActivity extends Activity {
 	public void calculate() {
 		for (int i = 0; i < textField.length(); i++) {
 			if (textField.getText().charAt(i) == '+') {
-				result = Float.parseFloat(textField.getText().toString().substring(0, i)) + Float.parseFloat(textField.getText().toString().substring(i + 1, textField.length()));
-				returnAnswer(decimalFormat.format(result));
+				if (textField.getText().charAt(0) != '-') {
+					result = Float.parseFloat(textField.getText().toString().substring(0, i)) + Float.parseFloat(textField.getText().toString().substring(i + 1, textField.length()));
+					returnAnswer(decimalFormat.format(result));
+				} else {
+					result = Float.parseFloat(textField.getText().toString().substring(1, i)) + Float.parseFloat(textField.getText().toString().substring(i + 1, textField.length()));
+					returnAnswer(decimalFormat.format(0 - result));
+				}
 			} else if (textField.getText().charAt(i) == '-') {
-				result = Float.parseFloat(textField.getText().toString().substring(0, i)) - Float.parseFloat(textField.getText().toString().substring(i + 1, textField.length()));
-				returnAnswer(decimalFormat.format(result));
+				if (textField.getText().charAt(0) != '-') {
+					result = Float.parseFloat(textField.getText().toString().substring(0, i)) - Float.parseFloat(textField.getText().toString().substring(i + 1, textField.length()));
+					returnAnswer(decimalFormat.format(result));
+				} else {
+					result = Float.parseFloat(textField.getText().toString().substring(1, i)) - Float.parseFloat(textField.getText().toString().substring(i + 1, textField.length()));
+					returnAnswer(decimalFormat.format(0 - result));
+				}
 			} else if (textField.getText().charAt(i) == '*') {
-				result = Float.parseFloat(textField.getText().toString().substring(0, i)) * Float.parseFloat(textField.getText().toString().substring(i + 1, textField.length()));
-				returnAnswer(decimalFormat.format(result));
+				if (textField.getText().charAt(0) != '-') {
+					result = Float.parseFloat(textField.getText().toString().substring(0, i)) * Float.parseFloat(textField.getText().toString().substring(i + 1, textField.length()));
+					returnAnswer(decimalFormat.format(result));
+				} else {
+					result = Float.parseFloat(textField.getText().toString().substring(1, i)) * Float.parseFloat(textField.getText().toString().substring(i + 1, textField.length()));
+					returnAnswer(decimalFormat.format(0 - result));
+				}
 			} else if (textField.getText().charAt(i) == '/') {
-				result = Float.parseFloat(textField.getText().toString().substring(0, i)) / Float.parseFloat(textField.getText().toString().substring(i + 1, textField.length()));
-				returnAnswer(decimalFormat.format(result));
+				if (textField.getText().charAt(0) != '-') {
+					result = Float.parseFloat(textField.getText().toString().substring(0, i)) / Float.parseFloat(textField.getText().toString().substring(i + 1, textField.length()));
+					returnAnswer(decimalFormat.format(result));
+				} else {
+					result = Float.parseFloat(textField.getText().toString().substring(1, i)) / Float.parseFloat(textField.getText().toString().substring(i + 1, textField.length()));
+					returnAnswer(decimalFormat.format(0 - result));
+				}
 			}
 		}
 		resultDisplayed = true;
@@ -230,50 +249,49 @@ public class MainActivity extends Activity {
 
 	// checks if last character is one of the operands (not -)
 	public void checkLastOp(String op) {
-		if (textField.getText().length() > 0) {
-			if (op.equals("-")) {
-				if (textField.getText().toString().substring(textField.getText().length() - 1).equals("*") || textField.getText().toString().substring(textField.getText().length() - 1).equals("/") || Character.isDigit(textField.getText().charAt(textField.getText().length() - 1))) {
-					addToOutput(op);
-				} else {
-					textField.getText().delete(textField.getText().length() - 1, textField.getText().length());
-					addToOutput(op);
-				}
-			} else {
-				if (!Character.isDigit(textField.getText().charAt(textField.getText().length() - 1))) {
-					textField.getText().delete(textField.getText().length() - 1, textField.getText().length());
-					addToOutput(op);
-				} else {
-					if (textField.getText().toString().contains("+") || textField.getText().toString().contains("-") || textField.getText().toString().contains("/") || textField.getText().toString().contains("*")) {
+		if (textField.length() == 0 & op == "-") {
+			addToOutput("-");
+		} else if (textField.length() > 0) {
+			if (op == "+") {
+				if (textField.getText().toString().contains("+") || textField.getText().toString().contains("-") || textField.getText().toString().contains("*") || textField.getText().toString().contains("/")) {
+					if (Character.isDigit(textField.getText().charAt(textField.length() - 1)) && textField.getText().charAt(0) != '-') {
 						calculate();
-						addToOutput(op);
-						resultDisplayed = true;
 					} else {
-						addToOutput(op);
+						if (!Character.isDigit(textField.getText().charAt(textField.length() - 1))) {
+							textField.getText().delete(textField.getText().length() - 1, textField.getText().length());
+						}
 					}
 				}
-			}
-		} else if (textField.getText().length() == 1) {
-			if (!textField.getText().toString().substring(textField.getText().length() - 1).equals("-")) {
-				addToOutput(op);
-			}
-		} else {
-			if (op.equals("-"))
-				addToOutput(op);
-		}
-	}
-
-	public int getOpIndex() {
-		boolean found = false;
-		for (int i = 0; i < textField.length(); i++) {
-			if (!found) {
-				if (textField.getText().charAt(i) == '+') {
-					found = true;
-					opIndex = i;
+				addToOutput("+");
+			} else if (op == "-") {
+				if (textField.getText().toString().contains("+") || textField.getText().toString().contains("-") || textField.getText().toString().contains("*") || textField.getText().toString().contains("/")) {
+					if (Character.isDigit(textField.getText().charAt(textField.length() - 1))) {
+						calculate();
+					} else if (textField.getText().charAt(textField.length() - 1) == '+' || textField.getText().charAt(textField.length() - 1) == '-') {
+						textField.getText().delete(textField.getText().length() - 1, textField.getText().length());
+					}
 				}
+				addToOutput("-");
+			} else if (op == "*") {
+				if (textField.getText().toString().contains("+") || textField.getText().toString().contains("-") || textField.getText().toString().contains("*") || textField.getText().toString().contains("/")) {
+					if (Character.isDigit(textField.getText().charAt(textField.length() - 1))) {
+						calculate();
+					} else {
+						textField.getText().delete(textField.getText().length() - 1, textField.getText().length());
+					}
+				}
+				addToOutput("*");
+			} else if (op == "/") {
+				if (textField.getText().toString().contains("+") || textField.getText().toString().contains("-") || textField.getText().toString().contains("*") || textField.getText().toString().contains("/")) {
+					if (Character.isDigit(textField.getText().charAt(textField.length() - 1))) {
+						calculate();
+					} else {
+						textField.getText().delete(textField.getText().length() - 1, textField.getText().length());
+					}
+				}
+				addToOutput("/");
 			}
 		}
-		System.out.println(opIndex);
-		return opIndex;
 	}
 
 	@Override
