@@ -1,6 +1,7 @@
 package com.main.calculate;
 
 import java.text.DecimalFormat;
+
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -31,6 +32,7 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
 		// requesting to turn the title OFF
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -56,7 +58,7 @@ public class MainActivity extends Activity {
 		button7 = (Button) findViewById(R.id.button7);
 		button8 = (Button) findViewById(R.id.button8);
 		button9 = (Button) findViewById(R.id.button9);
-		textField = (EditText) findViewById(R.id.textField);
+		textField = (EditText) findViewById(R.id.textField);		
 		textField.setInputType(InputType.TYPE_NULL);
 		registerForContextMenu(textField);
 
@@ -204,55 +206,14 @@ public class MainActivity extends Activity {
 				return false;
 			}
 		});
-
-	}
-
-	// calculation logic
-	public void calculate() {
-		for (int i = 0; i < textField.length(); i++) {
-			if (textField.getText().charAt(i) == '+') {
-				if (textField.getText().charAt(0) != '-') {
-					result = Float.parseFloat(textField.getText().toString().substring(0, i)) + Float.parseFloat(textField.getText().toString().substring(i + 1, textField.length()));
-					returnAnswer(decimalFormat.format(result));
-				} else {
-					result = Float.parseFloat(textField.getText().toString().substring(1, i)) + Float.parseFloat(textField.getText().toString().substring(i + 1, textField.length()));
-					returnAnswer(decimalFormat.format(0 - result));
-				}
-			} else if (textField.getText().charAt(i) == '-') {
-				if (textField.getText().charAt(0) != '-') {
-					result = Float.parseFloat(textField.getText().toString().substring(0, i)) - Float.parseFloat(textField.getText().toString().substring(i + 1, textField.length()));
-					returnAnswer(decimalFormat.format(result));
-				} else {
-					result = Float.parseFloat(textField.getText().toString().substring(1, i)) - Float.parseFloat(textField.getText().toString().substring(i + 1, textField.length()));
-					returnAnswer(decimalFormat.format(0 - result));
-				}
-			} else if (textField.getText().charAt(i) == '*') {
-				if (textField.getText().charAt(0) != '-') {
-					result = Float.parseFloat(textField.getText().toString().substring(0, i)) * Float.parseFloat(textField.getText().toString().substring(i + 1, textField.length()));
-					returnAnswer(decimalFormat.format(result));
-				} else {
-					result = Float.parseFloat(textField.getText().toString().substring(1, i)) * Float.parseFloat(textField.getText().toString().substring(i + 1, textField.length()));
-					returnAnswer(decimalFormat.format(0 - result));
-				}
-			} else if (textField.getText().charAt(i) == '/') {
-				if (textField.getText().charAt(0) != '-') {
-					result = Float.parseFloat(textField.getText().toString().substring(0, i)) / Float.parseFloat(textField.getText().toString().substring(i + 1, textField.length()));
-					returnAnswer(decimalFormat.format(result));
-				} else {
-					result = Float.parseFloat(textField.getText().toString().substring(1, i)) / Float.parseFloat(textField.getText().toString().substring(i + 1, textField.length()));
-					returnAnswer(decimalFormat.format(0 - result));
-				}
-			}
-		}
-		resultDisplayed = true;
 	}
 
 	// checks if last character is one of the operands (not -)
 	public void checkLastOp(String op) {
-		if (textField.length() == 0 & op == "-") {
+		if (textField.length() == 0 & op.equals("-")) {
 			addToOutput("-");
 		} else if (textField.length() > 0) {
-			if (op == "+") {
+			if (op.equals("+")) {
 				if (textField.getText().toString().contains("+") || textField.getText().toString().contains("-") || textField.getText().toString().contains("*") || textField.getText().toString().contains("/")) {
 					if (Character.isDigit(textField.getText().charAt(textField.length() - 1)) && textField.getText().charAt(0) != '-') {
 						calculate();
@@ -263,7 +224,7 @@ public class MainActivity extends Activity {
 					}
 				}
 				addToOutput("+");
-			} else if (op == "-") {
+			} else if (op.equals("-")) {
 				if (textField.getText().toString().contains("+") || textField.getText().toString().contains("-") || textField.getText().toString().contains("*") || textField.getText().toString().contains("/")) {
 					if (Character.isDigit(textField.getText().charAt(textField.length() - 1))) {
 						calculate();
@@ -272,7 +233,7 @@ public class MainActivity extends Activity {
 					}
 				}
 				addToOutput("-");
-			} else if (op == "*") {
+			} else if (op.equals("*")) {
 				if (textField.getText().toString().contains("+") || textField.getText().toString().contains("-") || textField.getText().toString().contains("*") || textField.getText().toString().contains("/")) {
 					if (Character.isDigit(textField.getText().charAt(textField.length() - 1))) {
 						calculate();
@@ -281,7 +242,7 @@ public class MainActivity extends Activity {
 					}
 				}
 				addToOutput("*");
-			} else if (op == "/") {
+			} else if (op.equals("/")) {
 				if (textField.getText().toString().contains("+") || textField.getText().toString().contains("-") || textField.getText().toString().contains("*") || textField.getText().toString().contains("/")) {
 					if (Character.isDigit(textField.getText().charAt(textField.length() - 1))) {
 						calculate();
@@ -291,6 +252,72 @@ public class MainActivity extends Activity {
 				}
 				addToOutput("/");
 			}
+		}
+	}
+
+	// calculation logic
+	public void calculate() {
+		for (int i = 0; i < textField.length(); i++) {
+			checkOp(i);
+		}
+		resultDisplayed = true;
+	}
+
+	public float checkOp(int i) {
+		if (textField.getText().charAt(i) == '+') {
+			result = Float.parseFloat(textField.getText().toString().substring(0, i)) + Float.parseFloat(textField.getText().toString().substring(i + 1, textField.length()));
+			returnAnswer(decimalFormat.format(result));
+		} else if (textField.getText().charAt(i) == '-') {
+			if (textField.getText().charAt(0) != '-') {
+				result = Float.parseFloat(textField.getText().toString().substring(0, i)) - Float.parseFloat(textField.getText().toString().substring(i + 1, textField.length()));
+			} else {
+
+			}
+		} else if (textField.getText().charAt(i) == '*') {
+			result = Float.parseFloat(textField.getText().toString().substring(0, i)) * Float.parseFloat(textField.getText().toString().substring(i + 1, textField.length()));
+			returnAnswer(decimalFormat.format(result));
+		} else if (textField.getText().charAt(i) == '/') {
+			result = Float.parseFloat(textField.getText().toString().substring(0, i)) / Float.parseFloat(textField.getText().toString().substring(i + 1, textField.length()));
+			returnAnswer(decimalFormat.format(result));
+		}
+
+		return result;
+	}
+
+	// adds numbers to the output field
+	public void addToOutput(int i) {
+		textField.append(Integer.toString(i));
+	}
+
+	// adds operands to the output field
+	public void addToOutput(String string) {
+		textField.append(string);
+	}
+
+	// set's text field to the returned calculation
+	public void returnAnswer(String output) {
+		textField.setText(output);
+	}
+
+	// deletes last character added
+	public void delete() {
+		if (textField.getText().length() > 0) {
+			textField.getText().delete(textField.getText().length() - 1, textField.getText().length());
+		}
+	}
+
+	// clears text field
+	public void clear() {
+		textField.setText("");
+	}
+
+	public void checkResultDisplayed(int i) {
+		if (resultDisplayed) {
+			clear();
+			addToOutput(i);
+			resultDisplayed = false;
+		} else {
+			addToOutput(i);
 		}
 	}
 
@@ -341,56 +368,18 @@ public class MainActivity extends Activity {
 		Toast.makeText(this, "Pasted from Clipboard", Toast.LENGTH_SHORT).show();
 	}
 
-	// adds numbers to the output field
-	public void addToOutput(int i) {
-		textField.append(Integer.toString(i));
-	}
-
-	// adds operands to the output field
-	public void addToOutput(String string) {
-		textField.append(string);
-	}
-
-	// set's text field to the returned calculation
-	public void returnAnswer(String output) {
-		textField.setText(output);
-	}
-
-	// deletes last character added
-	public void delete() {
-		if (textField.getText().length() > 0) {
-			textField.getText().delete(textField.getText().length() - 1, textField.getText().length());
-		}
-	}
-
-	// clears text field
-	public void clear() {
-		textField.setText("");
-	}
-
-	public void checkResultDisplayed(int i) {
-		if (resultDisplayed) {
-			clear();
-			addToOutput(i);
-			resultDisplayed = false;
-		} else {
-			addToOutput(i);
-		}
-	}
-
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
 		// Save state to the savedInstanceState
 		savedInstanceState.putString("TextField", textField.getText().toString());
-
 	}
 
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
 		// Restore state from savedInstanceState
-		textField.setText(savedInstanceState.getString("MyString"));
+		textField.setText(savedInstanceState.getString("TextField"));
 	}
 
 }

@@ -66,7 +66,7 @@
             android:layout_weight=".17"
             android:text="@string/times"
             android:textSize="30sp" />
-        
+
         <Button
             android:id="@+id/deleteButton"
             android:layout_width="50dp"
@@ -74,7 +74,7 @@
             android:layout_weight=".17"
             android:text="@string/delete"
             android:textSize="15sp" />
-        
+
         <Button
             android:id="@+id/clearButton"
             android:layout_width="50dp"
@@ -123,7 +123,7 @@
             android:layout_weight=".17"
             android:text="@string/decimal"
             android:textSize="30sp" />
-        
+
         <Button
             android:id="@+id/divideButton"
             android:layout_width="50dp"
@@ -131,7 +131,7 @@
             android:layout_weight=".17"
             android:text="@string/divide"
             android:textSize="30sp" />
-        
+
         <Button
             android:id="@+id/minusButton"
             android:layout_width="50dp"
@@ -196,7 +196,6 @@
             android:layout_weight=".17"
             android:text="@string/plus"
             android:textSize="30sp" />
-        
     </LinearLayout>
 
 </LinearLayout>
