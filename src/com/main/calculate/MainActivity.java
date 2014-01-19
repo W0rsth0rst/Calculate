@@ -19,6 +19,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.main.androidcalculator.R;
 
 public class MainActivity extends Activity {
 

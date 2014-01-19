@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.main.calculate"
+    package="com.main.androidcalculator"
     android:versionCode="201"
     android:versionName="2.1" >
 

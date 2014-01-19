@@ -8,8 +8,6 @@
     <string name="minus">-</string>
     <string name="divide">÷</string>
     <string name="times">*</string>
-    <string name="modulo">%</string>
-    <string name="power">^</string>
     <string name="decimal">.</string>
     <string name="equals">=</string>
     <string name="clear">Clear</string>
